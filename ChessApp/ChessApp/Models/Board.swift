@@ -49,7 +49,7 @@ final class Board {
     }
 
     func move(currentPosition: Position, to position :Position) -> Result<Piece, BoardMoveError> {
-        let fromBlockState = matrix[position.rank.value][position.file.value]
+        let fromBlockState = matrix[currentPosition.rank.value][currentPosition.file.value]
         switch fromBlockState {
         case .empty:
                 return .failure(.emptyBlock(postion: currentPosition))
