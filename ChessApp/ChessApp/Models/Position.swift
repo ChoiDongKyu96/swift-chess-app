@@ -43,6 +43,18 @@ struct Position: Equatable {
         self.file = file
 
     }
+
+    static func + (left: Position, right: Position) -> Position? {
+        return Position(rank: left.rank + right.rank, file: left.file + right.file)
+    }
+
+    static func - (left: Position, right: Position) -> Position? {
+        return Position(rank: left.rank + right.rank, file: left.file + right.file)
+    }
+
+    static func == (lhs: Position, rhs: Position) -> Bool {
+        return lhs.file == rhs.file && lhs.rank == rhs.rank
+    }
 }
 
 struct Rank: Equatable {
@@ -64,6 +76,34 @@ struct Rank: Equatable {
         guard (Config.minValue...Config.maxValue).contains(value) else { return nil
         }
         self.value = value
+    }
+
+    static func + (left: Rank, right: Rank) -> Rank? {
+        return Rank(left.value + right.value)
+    }
+
+    static func + (left: Rank, right: Int) -> Rank? {
+        return Rank(left.value + right)
+    }
+
+    static func + (left: Int, right: Rank) -> Rank? {
+        return Rank(left + right.value)
+    }
+
+    static func - (left: Rank, right: Rank) -> Rank? {
+        return Rank(left.value - right.value)
+    }
+
+    static func - (left: Rank, right: Int) -> Rank? {
+        return Rank(left.value - right)
+    }
+
+    static func - (left: Int, right: Rank) -> Rank? {
+        return Rank(left - right.value)
+    }
+
+    static func == (lhs: Rank, rhs: Rank) -> Bool {
+        return lhs.value == rhs.value
     }
 }
 
@@ -89,5 +129,33 @@ struct File: Equatable {
         guard (Config.minValue...Config.maxValue).contains(value) else { return nil
         }
         self.value = value
+    }
+
+    static func + (left: File, right: File) -> File? {
+        return File(left.value + right.value)
+    }
+
+    static func + (left: File, right: Int) -> File? {
+        return File(left.value + right)
+    }
+
+    static func + (left: Int, right: File) -> File? {
+        return File(left + right.value)
+    }
+
+    static func - (left: File, right: File) -> File? {
+        return File(left.value - right.value)
+    }
+
+    static func - (left: File, right: Int) -> File? {
+        return File(left.value - right)
+    }
+
+    static func - (left: Int, right: File) -> File? {
+        return File(left - right.value)
+    }
+
+    static func == (lhs: File, rhs: File) -> Bool {
+        return lhs.value == rhs.value
     }
 }

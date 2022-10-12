@@ -133,7 +133,7 @@ final class WhiteUser: User {
         let iconString: String = "♙"
 
         func possiblePositions(from position: Position) -> [Position] {
-           return [Position(rank: Rank(position.rank.value - 1), file: position.file)]
+           return [Position(rank: position.rank - 1, file: position.file)]
             .compactMap { $0 }
         }
 

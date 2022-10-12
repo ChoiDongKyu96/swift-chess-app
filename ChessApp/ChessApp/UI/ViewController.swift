@@ -9,13 +9,16 @@ import UIKit
 
 final class ViewController: UIViewController {
 
+    let chessGame: ChessGame = {
+        let users: [User] = [BlackUser(), WhiteUser()]
+        return ChessGame(users: users)
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let users: [User] = [BlackUser(), WhiteUser()]
-        let chessGame = ChessGame(users: users)
 
-        print(chessGame.board.description())
+
     }
 }
 

@@ -24,6 +24,7 @@
 		B95908E528E1E5B0001DE78D /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95908E428E1E5B0001DE78D /* Board.swift */; };
 		B95908E728E1E5BB001DE78D /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95908E628E1E5BB001DE78D /* Pawn.swift */; };
 		B95908EB28E2001A001DE78D /* ChessGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95908EA28E2001A001DE78D /* ChessGame.swift */; };
+		B997778728F2E9ED00EE0FEA /* BoradView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B997778628F2E9ED00EE0FEA /* BoradView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		B95908E428E1E5B0001DE78D /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		B95908E628E1E5BB001DE78D /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
 		B95908EA28E2001A001DE78D /* ChessGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessGame.swift; sourceTree = "<group>"; };
+		B997778628F2E9ED00EE0FEA /* BoradView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoradView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +139,7 @@
 				B95908B628E1E234001DE78D /* Main.storyboard */,
 				B95908BB28E1E235001DE78D /* LaunchScreen.storyboard */,
 				B95908B428E1E234001DE78D /* ViewController.swift */,
+				B997778628F2E9ED00EE0FEA /* BoradView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -269,6 +272,7 @@
 				B95908E528E1E5B0001DE78D /* Board.swift in Sources */,
 				B904CC8628EC731600D0DBC9 /* Bishop.swift in Sources */,
 				B904CC8C28EC734600D0DBC9 /* Knight.swift in Sources */,
+				B997778728F2E9ED00EE0FEA /* BoradView.swift in Sources */,
 				B95908E728E1E5BB001DE78D /* Pawn.swift in Sources */,
 				B904CC8828EC731C00D0DBC9 /* Rook.swift in Sources */,
 				B95908B328E1E234001DE78D /* SceneDelegate.swift in Sources */,

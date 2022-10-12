@@ -49,7 +49,7 @@ final class Board {
     }
 
     func move(currentPosition: Position, to position :Position) -> Result<Piece, BoardMoveError> {
-        let fromBlockState = matrix[currentPosition.rank.value][currentPosition.file.value]
+        let fromBlockState = matrix[currentPosition]
         switch fromBlockState {
         case .empty:
                 return .failure(.emptyBlock(postion: currentPosition))
@@ -57,7 +57,7 @@ final class Board {
             guard fromPiece.move(to: position) else {
                 return .failure(.undefinedMove)
             }
-            let toBlockState = matrix[position.rank.value][position.file.value]
+            let toBlockState = matrix[position]
             switch toBlockState {
             case .empty:
                 return .success(fromPiece)
@@ -99,3 +99,14 @@ final class Board {
     }
 }
 
+extension Array where Element == Array<Board.BlockState> {
+
+    subscript(position: Position) -> Board.BlockState {
+        get {
+            self[position.rank.value][position.file.value]
+        }
+        set {
+            self[position.rank.value][position.file.value] = newValue
+        }
+    }
+}
