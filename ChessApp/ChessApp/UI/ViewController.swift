@@ -9,16 +9,132 @@ import UIKit
 
 final class ViewController: UIViewController {
 
-    let chessGame: ChessGame = {
+    private var stackView: UIStackView?
+    private var focusedView: BoardView?
+
+    private let chessGame: ChessGame = {
         let users: [User] = [BlackUser(), WhiteUser()]
-        return ChessGame(users: users)
+        let game = ChessGame(users: users)
+        return game
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        chessGame.board.delegate = self
+        configureView()
+    }
+}
+
+extension ViewController: BoardDelegate {
+
+    func didChangeBoardMatrix(_ board: Board, matrix: [[Board.BlockState]]) {
+        configureView()
+    }
+}
+
+extension ViewController: BoardViewDelegate {
+
+    func didTapBoardView(_ boardView: BoardView) {
+        configureView()
+        guard focusedView?.position != boardView.position else {
+            focusedView = nil
+            return
+        }
+
+        if let position = boardView.position {
+            switch chessGame.matrix[position] {
+            case .empty:
+                break
+            case .exist(let piece):
+                piece.nextPossiblePositions.forEach { position in
+                    let nextPossibleBoardView = self.boardView(from: position)
+                    nextPossibleBoardView?.layer.backgroundColor = UIColor.systemCyan.cgColor
+                }
+                focusedView = boardView
+            }
+        }
+    }
+}
+
+private extension ViewController {
+
+    func boardView(from position: Position) -> BoardView? {
+        guard let stackView = stackView else { return nil }
+
+        for view in stackView.arrangedSubviews {
+            let hstackView = view as? UIStackView
+            if let hstackView = hstackView {
+                for view in hstackView.arrangedSubviews {
+                    if let boardView = view as? BoardView {
+                        if boardView.position == position {
+                            return boardView
+                        }
+                    }
+                }
+            }
+        }
+
+        return nil
+    }
+
+    func configureView() {
+        let vStackView = UIStackView()
+        stackView?.removeFromSuperview()
+        stackView = vStackView
+        vStackView.axis = .vertical
+        vStackView.distribution = .fillEqually
+        vStackView.alignment = .fill
+        vStackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(vStackView)
+        NSLayoutConstraint.activate([vStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+                                     vStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+                                     vStackView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                                     vStackView.heightAnchor.constraint(equalTo: vStackView.widthAnchor)])
+
+        let hStackView = UIStackView()
+        hStackView.axis = .horizontal
+        hStackView.distribution = .fillEqually
+        hStackView.alignment = .fill
+
+        hStackView.addArrangedSubview(BoardView())
+
+        (0..<(chessGame.matrix.first?.count ?? 0))
+            .compactMap { column in
+                File(column)
+            }.forEach { file in
+                let boardView = BoardView()
+                boardView.bind(to: file.valueName )
+                hStackView.addArrangedSubview(boardView)
+            }
 
 
+        vStackView.addArrangedSubview(hStackView)
 
+
+        chessGame.matrix.enumerated().forEach { (rankValue, row)  in
+            let hStackView = UIStackView()
+            hStackView.axis = .horizontal
+            hStackView.distribution = .fillEqually
+            hStackView.alignment = .fill
+
+            let boardView = BoardView()
+            boardView.bind(to: Rank(rankValue)?.valueName ?? "?" )
+            hStackView.addArrangedSubview(boardView)
+            row.enumerated().forEach { (fileValue, state) in
+                let boardView = BoardView()
+                boardView.delegate = self
+                switch state {
+                case .exist(let piece):
+                    boardView.bind(to: piece)
+                    boardView.bind(to: piece.position)
+                case .empty:
+                    boardView.bind(to: Position(rank: Rank(rankValue), file: File(fileValue)))
+                    break
+                }
+                hStackView.addArrangedSubview(boardView)
+            }
+            vStackView.addArrangedSubview(hStackView)
+        }
     }
 }
 

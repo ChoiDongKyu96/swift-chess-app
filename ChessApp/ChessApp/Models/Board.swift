@@ -24,10 +24,20 @@ enum BoardMoveError: LocalizedError {
     }
 }
 
+protocol BoardDelegate: AnyObject {
+    func didChangeBoardMatrix(_ board: Board, matrix: [[Board.BlockState]])
+}
 
 final class Board {
 
-    private(set) var matrix: [[BlockState]] = [[.empty]]
+    private(set) var matrix: [[BlockState]] = [[.empty]] {
+
+        didSet(newValue) {
+            delegate?.didChangeBoardMatrix(self, matrix: newValue)
+        }
+
+    }
+    weak var delegate: BoardDelegate?
     
     enum BlockState {
         case exist(_ value: Piece)

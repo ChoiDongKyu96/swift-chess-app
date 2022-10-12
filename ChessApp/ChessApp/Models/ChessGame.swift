@@ -9,6 +9,7 @@ import Foundation
 
 final class ChessGame {
 
+    var matrix: [[Board.BlockState]] { board.matrix }
     let board = Board()
     private let users: [User]
 
