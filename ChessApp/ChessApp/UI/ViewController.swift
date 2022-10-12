@@ -10,8 +10,7 @@ import UIKit
 final class ViewController: UIViewController {
 
     private var stackView: UIStackView?
-    private var focusedView: BoardView?
-
+    private var focusedPiece: Piece?
     private let chessGame: ChessGame = {
         let users: [User] = [BlackUser(), WhiteUser()]
         let game = ChessGame(users: users)
@@ -35,24 +34,44 @@ extension ViewController: BoardDelegate {
 extension ViewController: BoardViewDelegate {
 
     func didTapBoardView(_ boardView: BoardView) {
-        configureView()
-        guard focusedView?.position != boardView.position else {
-            focusedView = nil
-            return
-        }
 
-        if let position = boardView.position {
-            switch chessGame.matrix[position] {
-            case .empty:
-                break
-            case .exist(let piece):
-                piece.nextPossiblePositions.forEach { position in
-                    let nextPossibleBoardView = self.boardView(from: position)
-                    nextPossibleBoardView?.layer.backgroundColor = UIColor.systemCyan.cgColor
+        switch boardView.state {
+        case .focused:
+            focusedPiece = nil
+            boardView.state = .normal
+            break
+        case .normal:
+            configureView()
+            if let position = boardView.position {
+                switch chessGame.matrix[position] {
+                case .empty:
+                    break
+                case .exist(let piece):
+                    piece.nextPossiblePositions.forEach { position in
+                        let nextPossibleBoardView = self.boardView(from: position)
+                        nextPossibleBoardView?.state = .movingSpace
+                    }
+                    focusedPiece = nil
+                    if !piece.nextPossiblePositions.isEmpty {
+                        boardView.state = .focused
+                        focusedPiece = piece
+                    }
                 }
-                focusedView = boardView
+            }
+        case .movingSpace:
+            if let position = boardView.position, let currentPosition = focusedPiece?.position {
+                switch chessGame.board.move(currentPosition: currentPosition, to: position) {
+                case .failure(let error):
+                    print(error)
+                case .success:
+                    break
+                }
+                focusedPiece = nil
+                configureView()
             }
         }
+
+
     }
 }
 

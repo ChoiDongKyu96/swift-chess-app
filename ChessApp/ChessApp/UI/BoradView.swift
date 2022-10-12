@@ -13,8 +13,26 @@ protocol BoardViewDelegate: AnyObject {
 
 final class BoardView: UIView {
 
+    enum State {
+        case normal
+        case movingSpace
+        case focused
+    }
+
     weak var delegate: BoardViewDelegate?
     private(set) var position: Position?
+    var state: State = .normal {
+        didSet {
+            switch state {
+            case .normal:
+                backgroundColor = .clear
+            case .movingSpace:
+                backgroundColor = .systemCyan
+            case .focused:
+                backgroundColor = .systemGray5
+            }
+        }
+    }
 
     private let pieceLabel: UILabel = {
         let label = UILabel()

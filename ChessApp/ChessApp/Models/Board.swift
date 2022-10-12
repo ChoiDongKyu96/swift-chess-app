@@ -62,17 +62,27 @@ final class Board {
         let fromBlockState = matrix[currentPosition]
         switch fromBlockState {
         case .empty:
-                return .failure(.emptyBlock(postion: currentPosition))
+            return .failure(.emptyBlock(postion: currentPosition))
         case .exist(let fromPiece):
-            guard fromPiece.move(to: position) else {
-                return .failure(.undefinedMove)
-            }
             let toBlockState = matrix[position]
+
             switch toBlockState {
             case .empty:
+                guard fromPiece.move(to: position) else {
+                    return .failure(.undefinedMove)
+                }
+                matrix[currentPosition] = .empty
+                matrix[position] = .exist(fromPiece)
                 return .success(fromPiece)
             case .exist(let toPiece):
-                guard type(of: fromPiece.user) != type(of: toPiece.user) else { return .failure(.myPieceExist(piece: toPiece)) }
+                guard type(of: fromPiece.user) != type(of: toPiece.user) else {
+                    return .failure(.myPieceExist(piece: toPiece))
+                }
+                guard fromPiece.move(to: position) else {
+                    return .failure(.undefinedMove)
+                }
+                matrix[currentPosition] = .empty
+                matrix[position] = .exist(fromPiece)
                 fromPiece.user.score += toPiece.score
                 return .success(fromPiece)
             }
